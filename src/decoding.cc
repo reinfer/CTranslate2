@@ -779,15 +779,6 @@ namespace ctranslate2 {
     StorageView logits(dtype, device);
     std::vector<dim_t> batch_offset(batch_size);
     std::vector<DecodingResult> results(batch_size);
-    for (dim_t i = 0; i < batch_size; ++i) {
-      batch_offset[i] = i;
-      sample_from.at<int32_t>(i) = start_ids[i];
-      results[i].hypotheses.resize(1);
-      if (return_scores)
-        results[i].scores.resize(1, 0.f);
-      if (return_attention)
-        results[i].attention.resize(1);
-    }
 
     StorageView best_ids(DataType::INT32);
     StorageView best_probs(dtype);
@@ -796,6 +787,20 @@ namespace ctranslate2 {
     StorageView attention_step_device(dtype, device);
 
     const dim_t max_step = get_max_step(max_length, return_prefix, prefix_ids);
+
+    for (dim_t i = 0; i < batch_size; ++i) {
+      batch_offset[i] = i;
+      sample_from.at<int32_t>(i) = start_ids[i];
+      results[i].hypotheses.resize(1);
+      if (return_scores)
+      {
+        results[i].scores.resize(1, 0.f);
+        results[i].logits.resize(max_step);
+      };
+
+      if (return_attention)
+        results[i].attention.resize(1);
+    }
 
     for (dim_t step = 0; step < max_step; ++step) {
       convert_to_original_word_ids(decoder, sample_from);
@@ -851,6 +856,8 @@ namespace ctranslate2 {
         const size_t batch_id = batch_offset[i];
         const dim_t prefix_length = prefix_ids ? prefix_ids->at(batch_id).size() : 0;
         const float score = best_probs.scalar_at<float>({i, 0});
+        // convert word_id from 
+        const float log_prob = log_probs.scalar_at<float>({i, static_cast<int32_t>(word_id)});
 
         if ((!is_eos(word_id, end_ids) || include_eos_in_hypotheses)
             && (return_prefix || step >= prefix_length)) {
@@ -862,7 +869,10 @@ namespace ctranslate2 {
         }
 
         if (return_scores)
+        {
           results[batch_id].scores[0] += score;
+          results[batch_id].logits[step] = log_prob;
+        };
 
         bool is_finished = ((is_eos(word_id, end_ids) && step >= prefix_length)
                             || (is_last_step(step, max_length, prefix_length, return_prefix)));

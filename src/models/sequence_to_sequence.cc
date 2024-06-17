@@ -423,7 +423,8 @@ namespace ctranslate2 {
 
         final_results.emplace_back(std::move(hypotheses),
                                    std::move(result.scores),
-                                   std::move(result.attention));
+                                   std::move(result.attention),
+                                   std::move(result.logits));
       }
 
       return final_results;
@@ -462,6 +463,8 @@ namespace ctranslate2 {
           result.scores.emplace_back(0);
         if (options.return_attention)
           result.attention.emplace_back(attention);
+        if (options.return_scores)
+          result.logits.emplace_back(0);
       }
 
       return true;

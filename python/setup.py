@@ -112,6 +112,7 @@ setup(
         "numpy",
         "pyyaml>=5.3,<7",
     ],
+    include_package_data=True,
     entry_points={
         "console_scripts": [
             "ct2-fairseq-converter=ctranslate2.converters.fairseq:main",

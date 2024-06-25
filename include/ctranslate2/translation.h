@@ -87,6 +87,7 @@ namespace ctranslate2 {
     std::vector<std::vector<std::string>> hypotheses;
     std::vector<float> scores;
     std::vector<std::vector<std::vector<float>>> attention;
+    std::vector<float> logits;
 
     TranslationResult(std::vector<std::vector<std::string>> hypotheses_)
       : hypotheses(std::move(hypotheses_))
@@ -95,10 +96,12 @@ namespace ctranslate2 {
 
     TranslationResult(std::vector<std::vector<std::string>> hypotheses_,
                       std::vector<float> scores_,
-                      std::vector<std::vector<std::vector<float>>> attention_)
+                      std::vector<std::vector<std::vector<float>>> attention_, 
+                      std::vector<float> logits_)
       : hypotheses(std::move(hypotheses_))
       , scores(std::move(scores_))
       , attention(std::move(attention_))
+      , logits(std::move(logits_))
     {
     }
 
@@ -109,6 +112,7 @@ namespace ctranslate2 {
       : hypotheses(num_hypotheses)
       , scores(with_score ? num_hypotheses : 0, static_cast<float>(0))
       , attention(with_attention ? num_hypotheses : 0)
+      , logits(with_score ? num_hypotheses : 0)
     {
     }
 

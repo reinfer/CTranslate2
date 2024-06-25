@@ -123,3 +123,20 @@ Executed with CUDA 11 on a [*g5.xlarge*](https://aws.amazon.com/ec2/instance-typ
 * [Documentation](https://opennmt.net/CTranslate2)
 * [Forum](https://forum.opennmt.net)
 * [Gitter](https://gitter.im/OpenNMT/CTranslate2)
+
+
+# To build locally
+
+    cd CTranslate2
+    mkdir build
+    sudo cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_CUDA=ON -DWITH_CUDNN=ON -DWITH_MKL=ON -DOPENMP_RUNTIME=COMP -DCMAKE_BUILD_TYPE=Release ..
+    sudo make -j4
+    sudo make install
+    sudo ldconfig  
+
+# LD_LIBRARY_PATH should contain the ctranslate install path
+
+# Build python wheel
+    cd python
+    python setup.py bdist_wheel --dist-dir <path_to_wheel_dir>
+    auditwheel repair --plat manylinux_2_34_x86_64 <path_to_wheel>

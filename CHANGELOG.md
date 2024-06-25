@@ -4,6 +4,31 @@
 
 ### Fixes and improvements
 
+## [v3.24.0](https://github.com/OpenNMT/CTranslate2/releases/tag/v3.23.0) (2024-01-08)
+
+### New features
+* Support of new option offset to ignore token score of special tokens
+
+## [v3.23.0](https://github.com/OpenNMT/CTranslate2/releases/tag/v3.23.0) (2023-12-05)
+
+### New features
+* Support Phi model
+
+### Fixes and improvements
+* Fix the conversion for whisper without the "alignment_heads" in the "generation_config.json"
+* Fix forward batch
+
+## [v3.22.0](https://github.com/OpenNMT/CTranslate2/releases/tag/v3.22.0) (2023-11-22)
+
+### New features
+* Support "sliding window" and "chunking input" for Mistral
+
+### Fixes and improvements
+* Take into account the "generation_config.json" and fix "lang_ids" getter for Whisper converter
+* Accept callback even on "generate_tokens" method
+* Fix iomp5 linking with latest Intel OpenAPI on Ubuntu
+* Fixed "decoder_start_token_id" for T5
+
 ## [v3.21.0](https://github.com/OpenNMT/CTranslate2/releases/tag/v3.21.0) (2023-11-09)
 
 ### New features

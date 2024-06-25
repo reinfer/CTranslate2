@@ -16,11 +16,14 @@ namespace ctranslate2 {
                       "Score of each translation hypothesis (empty if :obj:`return_scores` was disabled).")
         .def_readonly("attention", &TranslationResult::attention,
                       "Attention matrix of each translation hypothesis (empty if :obj:`return_attention` was disabled).")
+        .def_readonly("logits", &TranslationResult::logits,
+                      "Logits for each decoding step")
 
         .def("__repr__", [](const TranslationResult& result) {
           return "TranslationResult(hypotheses=" + std::string(py::repr(py::cast(result.hypotheses)))
             + ", scores=" + std::string(py::repr(py::cast(result.scores)))
             + ", attention=" + std::string(py::repr(py::cast(result.attention)))
+            + ", logits=" + std::string(py::repr(py::cast(result.logits)))
             + ")";
         })
 
@@ -39,8 +42,10 @@ namespace ctranslate2 {
             throw py::index_error();
           py::dict hypothesis;
           hypothesis["tokens"] = result.hypotheses[i];
-          if (result.has_scores())
+          if (result.has_scores()){
             hypothesis["score"] = result.scores[i];
+            hypothesis["logits"] = result.logits[i];
+          };
           if (result.has_attention())
             hypothesis["attention"] = result.attention[i];
           return hypothesis;

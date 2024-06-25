@@ -15,6 +15,8 @@ namespace ctranslate2 {
     std::vector<std::vector<size_t>> hypotheses;
     std::vector<float> scores;
     std::vector<std::vector<std::vector<float>>> attention;
+    std::vector<float> logits;    
+    // (max_decoding_steps)
   };
 
   struct DecodingStepResult {

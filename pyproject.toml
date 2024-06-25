@@ -1,0 +1,6 @@
+[project]
+name = "ctranslate2"
+version = "0.0.1" 
+description = "ctranslate2 from https://github.com/prashanth058/CTranslate2/tree/dev/prashanth/return_logits"
+readme = "README.md"
+
